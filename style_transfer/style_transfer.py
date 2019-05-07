@@ -25,6 +25,7 @@ def stylize(args):
 	if args.segmentation:
 		segmentation_model = Segmentation(args)
 		fr_img, org_img, seg_results = segmentation_model.inference(args.content_image)
+		Utils.save_image('./test_seg.png', org_img)
 		c_img = org_img.copy()
 	else:
 		c_img = Utils.load_image(args.content_image)
