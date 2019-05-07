@@ -88,14 +88,14 @@ def main():
 	args.style_weight = 1e3
 	args.tv_weight = 1e-2
 	args.target_rand = False
-	args.epochs = 1000
+	args.epochs = 10
 	args.learning_rate = 0.06
 	args.show_transitions = True
 	args.optimizer = 'Adam'
-	args.interval = 20
+	args.interval = 2
 	args.content_image = '/home/content-sample.jpg'
 	args.style_image = '/home/sample-style.jpg'
-	args.segmentation = False
+	args.segmentation = True
 	args.cuda = 1
 	args.style_weights = get_style_weights()
 	stylize(args)
