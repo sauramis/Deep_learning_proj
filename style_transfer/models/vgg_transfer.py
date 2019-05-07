@@ -75,8 +75,8 @@ class VGGTransfer(object):
 			torch.sum(torch.abs(result_img[:, :-1, :] - result_img[:, 1:, :]))
 		)), dtype = torch.float)
 
-		def content_loss(self, target_features):
-			return torch.mean((target_features["conv4_2"] - content_features["conv4_2"]) ** 2)
+	def content_loss(self, target_features):
+		return torch.mean((target_features["conv4_2"] - content_features["conv4_2"]) ** 2)
 
 	def extract_features(self, image):
 		# Use same layers as used in the Style Transfer paper

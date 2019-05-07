@@ -53,7 +53,7 @@ class Segmentaion(object):
 
 	def inference(self, image_path):
 		image = self.load_image(image_path)
-		result = sefl.model.detect([image.copy()], verbose=self.verbosity)
+		result = self.model.detect([image.copy()], verbose=self.verbosity)
 
 		f_img = self.extract_foreground(result, image.copy())
 
