@@ -24,7 +24,7 @@ def stylize(args):
 
 	if args.segmentation:
 		segmentation_model = Segmentation(args)
-		fr_img, seg_results = segmentation_model.inference(args.content_image)
+		_fr_img, seg_results = segmentation_model.inference(args.content_image)
 
 	c_img = Utils.load_image(args.content_image)
 	style_img = Utils.load_image(args.style_image)
@@ -33,7 +33,13 @@ def stylize(args):
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
 	args_dict = vars(args)
 	transformed_image_tensor = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
-	Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor)
+
+	if args.segmentation:
+		output_image = Utils.tensor_im(transformed_image_tensor)
+		output_image = Utils.apply_background(output_image, Utils.load_image(args.content_image), seg_results)
+		Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', output_image, "np_arr")
+	else:
+		Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor)
 
 def define_module_args():
 	main_arg_parser = argparse.ArgumentParser(description="parser for style transfer")
@@ -92,7 +98,7 @@ def main():
 	args.interval = 100
 	args.content_image = '/content/content-sample.jpg'
 	args.style_image = '/content/black_lines.jpg'
-	args.segmentation = False
+	args.segmentation = True
 	args.cuda = 1
 	args.style_weights = get_style_weights()
 

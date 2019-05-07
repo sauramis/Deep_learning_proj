@@ -9,7 +9,7 @@ class Utils(object):
 	@staticmethod
 	def apply_background(style_image, org_img, seg_results):
 		result_roi = seg_results["rois"]
-		n_channel = image.shape[:3]
+		n_channel = org_img.shape[:3]
 		image_out = org_img.copy()
 
 		for iter_ in range(result_roi.shape[0]):
@@ -53,5 +53,8 @@ class Utils(object):
 		return image
 
 	@staticmethod
-	def save_image(filename, data):
-	    skimage.io.imsave(filename, Utils.tensor_im(data))
+	def save_image(filename, data, d_type="tensor"):
+		if d_type == "tensor":
+			skimage.io.imsave(filename, Utils.tensor_im(data))
+		else:
+			skimage.io.imsave(filename, data)
