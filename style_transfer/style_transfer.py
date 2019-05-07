@@ -9,6 +9,7 @@ import argparse
 from PIL import Image
 import time
 import skimage.io
+from pathlib import Path
 
 def get_style_weights():
 	style_weights = {
@@ -22,6 +23,8 @@ def get_style_weights():
 	return style_weights
 
 def stylize(args):
+	base_path = Path(os.path.abspath(__file__)).parent
+
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
 	args_dict = vars(args)
 
@@ -40,7 +43,8 @@ def stylize(args):
 		transformer = FastStyleTransfer(args_dict, device)
 		transformed_image_tensor = transformer.inference()
 
-	output_filename = "./outputs/results_" + int(time.time()) + ".png"
+	output_filename = "outputs/results_" + str(int(time.time())) + ".png"
+	output_filename = os.path.join(base_path, output_filename)
 
 	if args.segmentation:
 		output_image = Utils.tensor_im(transformed_image_tensor)
