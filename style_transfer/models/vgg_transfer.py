@@ -105,8 +105,7 @@ class VGGTransfer(object):
 
 			if name in self.required_layers():
 				ext_features[self.required_layers()[name]] = image
-
-		print(ext_features.keys())
+				
 		return ext_features
 
 	def required_layers(self):
