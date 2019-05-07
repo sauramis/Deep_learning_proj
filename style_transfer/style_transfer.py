@@ -114,7 +114,7 @@ def main():
 	args.transfer_method = 2
 	args.segmentation = False
 	args.content_image = '/content/content-sample.jpg'
-	args.content_scale = 420
+	args.content_scale = 0.4
 	args.model = 2
 	args.style_model_type = "candy"
 	args.cuda = 1

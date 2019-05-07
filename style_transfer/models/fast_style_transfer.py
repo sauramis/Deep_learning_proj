@@ -35,7 +35,7 @@ class FastStyleTransfer(object):
         ])
 
         content_image = content_transform(self.content_image)
-        content_image = content_image.unsqueeze(0).to(device)
+        content_image = content_image.unsqueeze(0).to(self.device)
 
         with torch.no_grad():
             style_model = TransformerNet()
@@ -45,5 +45,5 @@ class FastStyleTransfer(object):
                     del state_dict[k]
 
             style_model.load_state_dict(state_dict)
-            style_model.to(device)
+            style_model.to(self.device)
             output = style_model(content_image).cpu()
