@@ -35,10 +35,7 @@ def stylize(args):
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
 	args_dict = vars(args)
 	transformed_image_np = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
-
-	print(type(transformed_image_np))
-
-	transformed_image = Image.fromarray(transformed_image_np)
+	transformed_image = Image.fromarray(transformed_image_np.astype('uint8'))
 	if transformed_image.mode != 'RGB':
 		transformed_image = transformed_image.convert('RGB')
 	transformed_image.save('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.PNG')
