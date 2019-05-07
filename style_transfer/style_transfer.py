@@ -13,6 +13,7 @@ def get_style_weights():
 		'conv4_1': 0.2,
 		'conv5_1': 0.2
 	}
+	return style_weights
 
 def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
