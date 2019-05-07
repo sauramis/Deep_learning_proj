@@ -3,6 +3,7 @@ import os
 import sys
 from utils import Utils
 from models.vgg_transfer import *
+from models.segmentation import *
 import argparse
 from PIL import Image
 from datetime import datetime
@@ -21,7 +22,7 @@ def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
 
 	if args.segmentation:
-		segmentation_model = models.Segmentation(args)
+		segmentation_model = Segmentation(args)
 		c_img, org_img, seg_results = segmentation_model.inference(args.content_image)
 	else:
 		c_img = Utils.load_image(args.content_image)
