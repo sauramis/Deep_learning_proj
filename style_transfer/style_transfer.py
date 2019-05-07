@@ -94,7 +94,7 @@ def main():
 	args.interval = 100
 	args.content_image = '/content/content-sample.jpg'
 	args.style_image = '/content/black_lines.jpg'
-	args.segmentation = False
+	args.segmentation = True
 	args.cuda = 1
 	args.style_weights = get_style_weights()
 
