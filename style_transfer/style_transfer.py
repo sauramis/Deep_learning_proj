@@ -5,6 +5,15 @@ from utils import Utils
 from models.vgg_transfer import *
 import argparse
 
+def get_style_weights():
+	style_weights = {
+		'conv1_1': 1.,
+		'conv2_1': 0.75,
+		'conv3_1': 0.2,
+		'conv4_1': 0.2,
+		'conv5_1': 0.2
+	}
+
 def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
 
@@ -20,6 +29,7 @@ def stylize(args):
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img.shape[-2:], style=True).to(device)
 
 	args_dict = vars(args)
+	args_dict["style_weights"] = get_style_weights()
 	transformer = VGGTransfer(args_dict, device)
 
 
@@ -67,6 +77,7 @@ def main():
 	# if args.cuda and not torch.cuda.is_available():
 	# 	print("Error: cuda is not available, try it on CPU")
 	# 	sys.exit(1)
+	
 	args = argparse.Namespace()
 	args.content_weight = 5
 	args.style_weight = 1e3
