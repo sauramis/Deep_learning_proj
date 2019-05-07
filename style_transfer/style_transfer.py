@@ -7,7 +7,7 @@ from models.segmentation import *
 from models.fast_style_transfer import *
 import argparse
 from PIL import Image
-from datetime import datetime
+import time
 import skimage.io
 
 def get_style_weights():
@@ -40,15 +40,17 @@ def stylize(args):
 		transformer = FastStyleTransfer(args_dict, device)
 		transformed_image_tensor = transformer.inference()
 
+	output_filename = "./outputs/results_" + int(time.time()) + ".png"
+
 	if args.segmentation:
 		output_image = Utils.tensor_im(transformed_image_tensor)
 		output_image = Utils.apply_background(output_image, skimage.io.imread(args.content_image), seg_results)
-		Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', output_image, "np_arr")
+		Utils.save_image(output_filename, output_image, "np_arr")
 	else:
 		if args.transfer_method == 2:
-			Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor, "np_arr")
+			Utils.save_image(output_filename, transformed_image_tensor, "np_arr")
 		else:
-			Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor)
+			Utils.save_image(output_filename, transformed_image_tensor)
 
 def define_module_args():
 	main_arg_parser = argparse.ArgumentParser(description="parser for style transfer")

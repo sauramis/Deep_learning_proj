@@ -10,8 +10,12 @@ from .lib.fast_style_transfer.utils import *
 from pathlib import Path
 from utils import Utils
 import torch.onnx
+from torch.utils.model_zoo import _download_url_to_file
+import zipfile
 
 class FastStyleTransfer(object):
+    MODEL_DOWNLOAD_URL = "https://www.dropbox.com/s/lrvwfehqdcxoza8/saved_models.zip?dl=1"
+
     def __init__(self, args, device):
         self.device = device
         self.content_image = load_image(args["content_image"], scale=args["content_scale"])
@@ -19,13 +23,22 @@ class FastStyleTransfer(object):
         self.model_dir = os.path.join(Path(os.path.abspath(__file__)).parent, "lib/fast_style_transfer/saved_models")
 
     def download_model(self):
-        pass
+        download_dest = os.path.join(self.model_dir, "saved_models.zip")
+
+        _download_url_to_file(self.MODEL_DOWNLOAD_URL, download_dest, None, True)
+
+        with zipfile.ZipFile(download_dest) as zf:
+            zf.extractall(path=self.model_dir)
 
     def resolve_model_path(self):
         model_path = Path(os.path.join(self.model_dir, self.style_model_type + ".pth"))
 
         if not model_path.is_file():
-            raise Exception("Model not found. Please Download.")
+            print("Model not found. Downloading.....")
+            self.download_model()
+
+        if not model_path.is_file():
+            raise Exception("Model not found in the download also. Please check.")
 
         return model_path
 
