@@ -8,8 +8,9 @@ import skimage.io
 import matplotlib
 import matplotlib.pyplot as plt
 import yaml
+from pathlib import Path
 
-from .lib.coco import coco
+from .lib.mrcnn import coco
 from .lib.mrcnn import utils
 from .lib.mrcnn import model as modellib
 
@@ -21,13 +22,10 @@ class InferenceConfig(coco.CocoConfig):
 	IMAGES_PER_GPU = 1
 
 
-class Segmentaion(object):
-	def __init__(self, args, verbosity=1, download=False):
-		self.log_path = args.log_path
-		self.weights_path = args.weight_path
-
-		if download:
-			utils.download_trained_weights(self.weights_path)
+class Segmentation(object):
+	def __init__(self, args, verbosity=1):
+		if not Path(coco.COCO_MODEL_PATH).is_file():
+			utils.download_trained_weights(coco.COCO_MODEL_PATH)
 
 		self.config = InferenceConfig()
 		self.model = self.initialize_model()
@@ -43,8 +41,8 @@ class Segmentaion(object):
 		return class_names
 
 	def initialize_model(self):
-		model = modellib.MaskRCNN(mode="inference", config=self.config, model_dir = self.log_path)
-		model.load_weights(self.weights_path, by_name=True)
+		model = modellib.MaskRCNN(mode="inference", config=self.config, model_dir=coco.DEFAULT_LOGS_DIR)
+		model.load_weights(coco.COCO_MODEL_PATH, by_name=True)
 
 		return model
 
