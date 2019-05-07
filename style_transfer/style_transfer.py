@@ -81,26 +81,24 @@ def main():
 	# if args.cuda and not torch.cuda.is_available():
 	# 	print("Error: cuda is not available, try it on CPU")
 	# 	sys.exit(1)
-	
+		
 	args = argparse.Namespace()
 	args.content_weight = 5
-	args.style_weight = 1e3
-	args.tv_weight = 1e-2
+	args.style_weight = 1e2
+	args.tv_weight = 1e-3
 	args.target_rand = False
-	args.epochs = 10
-	args.learning_rate = 0.06
+	args.epochs = 1000
+	args.learning_rate = 0.08
 	args.show_transitions = True
 	args.optimizer = 'Adam'
-	args.interval = 2
+	args.interval = 100
 	args.content_image = '/content/content-sample.jpg'
-	args.style_image = '/content/sample-style.jpg'
+	args.style_image = '/content/black_lines.jpg'
 	args.segmentation = False
 	args.cuda = 1
 	args.style_weights = get_style_weights()
-	stylize(args)
 
 	stylize(args)
-
 
 if __name__ == "__main__":
 	main()
