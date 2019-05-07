@@ -16,6 +16,7 @@ def get_style_weights():
 		'conv4_1': 0.2,
 		'conv5_1': 0.2
 	}
+	
 	return style_weights
 
 def stylize(args):
@@ -24,7 +25,7 @@ def stylize(args):
 	if args.segmentation:
 		segmentation_model = Segmentation(args)
 		fr_img, org_img, seg_results = segmentation_model.inference(args.content_image)
-		c_img = org_img.clone()
+		c_img = org_img.copy()
 	else:
 		c_img = Utils.load_image(args.content_image)
 
