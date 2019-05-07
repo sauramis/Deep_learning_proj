@@ -2,14 +2,13 @@ import numpy as np
 import skimage.io
 import torch
 from torchvision import transforms
-
+from PIL import Image
 class Utils(object):
 	
 	@staticmethod
 	def apply_background(style_image, org_img, seg_results):
 		result_roi = seg_results["rois"]
 		n_channel = image.shape[:3]
-
 		image_out = org_img.copy()
 
 		for iter_ in range(result_roi.shape[0]):
@@ -22,7 +21,7 @@ class Utils(object):
 
 	@staticmethod
 	def load_image(image_path):
-		return skimage.io.imread(image_path)
+		return Image.open(image_path).convert('RGB')
 
 	@staticmethod
 	def im_tensor(image, max_size = 400, shape = None, style=False):
@@ -42,12 +41,12 @@ class Utils(object):
 
 	    return image_tensor
 
-    @staticmethod
-    def tensor_im(img_tensor):
-	    image = img_tensor.cpu().clone().detach().numpy()
-	    image = image.squeeze()
-	    image = image.transpose(1, 2, 0)
-	    image = image * np.array((0.5, 0.5, 0.5)) + np.array((0.5, 0.5, 0.5))
-	    image = image.clip(0, 1)
-	    
-	    return image
+	@staticmethod
+	def tensor_im(img_tensor):
+			image = img_tensor.cpu().clone().detach().numpy()
+			image = image.squeeze()
+			image = image.transpose(1, 2, 0)
+			image = image * np.array((0.5, 0.5, 0.5)) + np.array((0.5, 0.5, 0.5))
+			image = image.clip(0, 1)
+			
+			return image

@@ -43,7 +43,7 @@ class Segmentaion(object):
 		return class_names
 
 	def initialize_model(self):
-		model = modellib.MaskRCNN(mode="inference", self.config, self.log_path)
+		model = modellib.MaskRCNN(mode="inference", config=self.config, model_dir = self.log_path)
 		model.load_weights(self.weights_path, by_name=True)
 
 		return model
