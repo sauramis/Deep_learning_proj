@@ -9,18 +9,20 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from utils import Utils
 
 class VGGTransfer(object):
-	def __init__(self, args, device, style_weights):
+	def __init__(self, args, device):
 		self.model = models.vgg19(pretrained = True).features
+		self.device = device
 		self.model.to(device)
-		self.style_weights = style_weights
-		self.content_weight = args.content_weight
-		self.style_weight = args.style_weight
-		self.tv_weight = args.tv_weight
-		self.target_init_rand = args.target_rand
-		self.epochs = args.epochs
-		self.learning_rate = args.learning_rate
-		self.show_transistions = args.show_transitions
-		self.optimizer_type = args.optimizer
+		self.style_weights = args["style_weights"]
+		self.content_weight = args["content_weight"]
+		self.style_weight = args["style_weight"]
+		self.tv_weight = args["tv_weight"]
+		self.target_init_rand = args["target_rand"]
+		self.epochs = args["epochs"]
+		self.learning_rate = args["learning_rate"]
+		self.show_transistions = args["show_transitions"]
+		self.optimizer_type = args["optimizer"]
+		self.interval = args["interval"]
 
 	def set_optimizer(self, optimizer_type, target):
 		if optimizer_type == "Adam":
@@ -32,8 +34,8 @@ class VGGTransfer(object):
 		img_features = self.extract_features(c_image)
 		style_features = self.extract_features(s_image)
 
-		style_gram = {
-			layer: gram_matrix(style_features[layer]) for layer in style_features
+		style_grams = {
+			layer: self.gram_matrix(style_features[layer]) for layer in style_features
 		}
 
 		target_img = self.init_target(c_image)
@@ -41,23 +43,38 @@ class VGGTransfer(object):
 
 		for iter_ in range(1, self.epochs + 1):
 			target_features = self.extract_features(target_img)
-			content_loss = self.content_loss(target_features)
+
+			content_loss = self.content_loss(target_features, img_features)
 			cumm_style_loss = 0
 
-			for layer in self.required_layers:
+			for layer in self.style_weights:
 				feature = target_features[layer]
 				feature_gram = self.gram_matrix(feature)
-				style_gram = style_gram[layer]
+				style_gram = style_grams[layer]
 
-				layer_style_loss = self.required_layers[layer] * torch.mean((feature_gram - style_gram) ** 2)
+				layer_style_loss = self.style_weights[layer] * torch.mean((feature_gram - style_gram) ** 2)
 				_, d, h, w = feature.shape
 				cumm_style_loss += layer_style_loss / (d * h * w)
+
+			target_image = Utils.tensor_im(target_img)
+			t_loss = self.tv_loss(torch.from_numpy(target_image))
+			
+			total_loss = self.content_weight * content_loss + self.style_weight * cumm_style_loss + self.tv_weight * t_loss
+			optimizer.zero_grad()
+			total_loss.backward()
+			optimizer.step()
+
+			if self.show_transistions:
+				if iter_ % self.interval == 0:
+					plt.imshow(target_image)
+					plt.axis('off')
+					plt.show()
 
 	def init_target(self, c_image):
 		if self.target_init_rand:
 			return c_image.copy()
 		else:
-			return c_image.clone().requires_grad_(True).to(device)
+			return c_image.clone().requires_grad_(True).to(self.device)
 
 	def gram_matrix(self, im_tensor):
 		"""
@@ -75,7 +92,7 @@ class VGGTransfer(object):
 			torch.sum(torch.abs(result_img[:, :-1, :] - result_img[:, 1:, :]))
 		)), dtype = torch.float)
 
-	def content_loss(self, target_features):
+	def content_loss(self, target_features, content_features):
 		return torch.mean((target_features["conv4_2"] - content_features["conv4_2"]) ** 2)
 
 	def extract_features(self, image):
@@ -89,6 +106,7 @@ class VGGTransfer(object):
 			if name in self.required_layers():
 				ext_features[self.required_layers()[name]] = image
 
+		print(ext_features.keys())
 		return ext_features
 
 	def required_layers(self):

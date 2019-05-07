@@ -2,6 +2,8 @@
 import os
 import sys
 from utils import Utils
+from models.vgg_transfer import *
+import argparse
 
 def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
@@ -17,35 +19,24 @@ def stylize(args):
 	c_img_tensor = Utils.im_tensor(c_img).to(device)
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img.shape[-2:], style=True).to(device)
 
+	args_dict = vars(args)
+	transformer = VGGTransfer(args_dict, device)
+
 
 def define_module_args():
     main_arg_parser = argparse.ArgumentParser(description="parser for style transfer")
     subparsers = main_arg_parser.add_subparsers(title="subcommands", dest="subcommand")
-
     model_arg_parser = subparsers.add_parser("model", help="parser for model arguments")
-
-    model_arg_parser.add_argument("--method", help="type of style transfer", 
-    	type=str, required=True, default="original"
-   	)
-   	model_arg_parser.add_argument("--epochs", help="number of epochs for evaluation",
-   		type=int, default=10
-	)
-	model_arg_parser.add_argument("--log-path", help="path to log directory",
-   		type=str, required=True
-	)
-	model_arg_parser.add_argument("--style-image", help="path to the style image",
-		type=str, required=True, default="images/style-images/mosaic.jpg"
-	)
-	model_arg_parser.add_argument("--segmentation", help="segment the content image",
-		type=bool, default=False
-	)
-	model_arg_parser.add_argument("--image-size", help="size of training images, default is 256 X 256",
-		type=int, default=256
-	)
-	model_arg_parser.add_argument("--content-image", help="path to the content image",
+    model_arg_parser.add_argument("--method", help="type of style transfer", type=str, required=True, default="original")
+    model_arg_parser.add_argument("--epochs", help="number of epochs for evaluation", type=int, default=10)
+    model_arg_parser.add_argument("--log-path", help="path to log directory", type=str, required=True)
+    model_arg_parser.add_argument("--style-image", help="path to the style image", type=str, required=True, default="images/style-images/mosaic.jpg")
+    model_arg_parser.add_argument("--segmentation", help="segment the content image", type=bool, default=False)
+    model_arg_parser.add_argument("--image-size", help="size of training images, default is 256 X 256", type=int, default=256)
+    model_arg_parser.add_argument("--content-image", help="path to the content image",
 		type=str, required=True, default="images/content/mosaic.jpg"
 	)
-	model_arg_parser.add_argument("--output-image", help="path for saving the output image",
+    model_arg_parser.add_argument("--output-image", help="path for saving the output image",
 		type=str, required=True
 	)
     model_arg_parser.add_argument("--cuda", help="set it to 1 for running on GPU, 0 for CPU", 
@@ -54,11 +45,11 @@ def define_module_args():
     model_arg_parser.add_argument("--content-weight", help="weight for content-loss, default is 1e5",
     	type=float, default=1e5
   	)
-  	model_arg_parser.add_argument("--style-weight", help="weight for style-loss, default is 1e10", 
+    model_arg_parser.add_argument("--style-weight", help="weight for style-loss, default is 1e10", 
   		type=float, default=1e10
 	)
 
-	return main_arg_parser.parse_args()
+    return main_arg_parser.parse_args()
 
 def main():
 	args = define_module_args()
