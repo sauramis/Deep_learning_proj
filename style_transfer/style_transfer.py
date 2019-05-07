@@ -7,6 +7,7 @@ from models.segmentation import *
 import argparse
 from PIL import Image
 from datetime import datetime
+import skimage.io
 
 def get_style_weights():
 	style_weights = {
@@ -36,7 +37,7 @@ def stylize(args):
 
 	if args.segmentation:
 		output_image = Utils.tensor_im(transformed_image_tensor)
-		output_image = Utils.apply_background(output_image, Utils.load_image(args.content_image), seg_results)
+		output_image = Utils.apply_background(output_image, skimage.io.imread(args.content_image), seg_results)
 		Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', output_image, "np_arr")
 	else:
 		Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor)
