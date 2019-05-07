@@ -4,6 +4,7 @@ from torchvision import transforms, models
 import matplotlib.pyplot as plt
 import sys
 import os
+from PIL import Image
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from utils import Utils
@@ -66,6 +67,8 @@ class VGGTransfer(object):
 
 			if self.show_transistions:
 				if iter_ % self.interval == 0:
+					img = Image.fromarray(target_image.astype("uint8"))
+					img.save("test.png")
 					plt.imshow(target_image)
 					plt.axis('off')
 					plt.show()

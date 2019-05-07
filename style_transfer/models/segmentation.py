@@ -56,7 +56,7 @@ class Segmentation(object):
 
 		f_img = self.extract_foreground(result[0], image.copy())
 
-		return f_img, image, result[0]
+		return f_img, result[0]
 
 	def extract_foreground(self, result, image):
 		f_img = np.zeros_like(image)
