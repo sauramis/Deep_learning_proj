@@ -23,7 +23,8 @@ def stylize(args):
 
 	if args.segmentation:
 		segmentation_model = Segmentation(args)
-		c_img, org_img, seg_results = segmentation_model.inference(args.content_image)
+		fr_img, org_img, seg_results = segmentation_model.inference(args.content_image)
+		c_img = org_img.clone()
 	else:
 		c_img = Utils.load_image(args.content_image)
 
@@ -94,8 +95,8 @@ def main():
 	args.show_transitions = True
 	args.optimizer = 'Adam'
 	args.interval = 2
-	args.content_image = '/home/content-sample.jpg'
-	args.style_image = '/home/sample-style.jpg'
+	args.content_image = '/content/content-sample.jpg'
+	args.style_image = '/content/sample-style.jpg'
 	args.segmentation = True
 	args.cuda = 1
 	args.style_weights = get_style_weights()
