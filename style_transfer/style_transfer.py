@@ -29,7 +29,6 @@ def stylize(args):
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img.shape[-2:], style=True).to(device)
 
 	args_dict = vars(args)
-	args_dict["style_weights"] = get_style_weights()
 	transformer = VGGTransfer(args_dict, device)
 
 
@@ -92,7 +91,7 @@ def main():
 	args.style_image = '/home/sample-style.jpg'
 	args.segmentation = False
 	args.cuda = 1
-	args.style_weights = style_weights
+	args.style_weights = get_style_weights()
 	stylize(args)
 
 	stylize(args)
