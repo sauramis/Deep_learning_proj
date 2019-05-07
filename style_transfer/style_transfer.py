@@ -3,7 +3,6 @@ import os
 import sys
 from utils import Utils
 from models.vgg_transfer import *
-import argparse
 
 def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
@@ -26,17 +25,23 @@ def stylize(args):
 def define_module_args():
     main_arg_parser = argparse.ArgumentParser(description="parser for style transfer")
     subparsers = main_arg_parser.add_subparsers(title="subcommands", dest="subcommand")
-    model_arg_parser = subparsers.add_parser("model", help="parser for model arguments")
+	model_arg_parser = subparsers.add_parser("model", help="parser for model arguments")
     model_arg_parser.add_argument("--method", help="type of style transfer", type=str, required=True, default="original")
-    model_arg_parser.add_argument("--epochs", help="number of epochs for evaluation", type=int, default=10)
-    model_arg_parser.add_argument("--log-path", help="path to log directory", type=str, required=True)
-    model_arg_parser.add_argument("--style-image", help="path to the style image", type=str, required=True, default="images/style-images/mosaic.jpg")
-    model_arg_parser.add_argument("--segmentation", help="segment the content image", type=bool, default=False)
-    model_arg_parser.add_argument("--image-size", help="size of training images, default is 256 X 256", type=int, default=256)
-    model_arg_parser.add_argument("--content-image", help="path to the content image",
+	model_arg_parser.add_argument("--epochs", help="number of epochs for evaluation", type=int, default=10)
+	model_arg_parser.add_argument("--log-path", help="path to log directory",type=str, required=True)
+	model_arg_parser.add_argument("--style-image", help="path to the style image",
+		type=str, required=True, default="images/style-images/mosaic.jpg"
+	)
+	model_arg_parser.add_argument("--segmentation", help="segment the content image",
+		type=bool, default=False
+	)
+	model_arg_parser.add_argument("--image-size", help="size of training images, default is 256 X 256",
+		type=int, default=256
+	)
+	model_arg_parser.add_argument("--content-image", help="path to the content image",
 		type=str, required=True, default="images/content/mosaic.jpg"
 	)
-    model_arg_parser.add_argument("--output-image", help="path for saving the output image",
+	model_arg_parser.add_argument("--output-image", help="path for saving the output image",
 		type=str, required=True
 	)
     model_arg_parser.add_argument("--cuda", help="set it to 1 for running on GPU, 0 for CPU", 
@@ -45,23 +50,38 @@ def define_module_args():
     model_arg_parser.add_argument("--content-weight", help="weight for content-loss, default is 1e5",
     	type=float, default=1e5
   	)
-    model_arg_parser.add_argument("--style-weight", help="weight for style-loss, default is 1e10", 
+  	model_arg_parser.add_argument("--style-weight", help="weight for style-loss, default is 1e10", 
   		type=float, default=1e10
 	)
 
-    return main_arg_parser.parse_args()
+	return main_arg_parser.parse_args()
 
 def main():
-	args = define_module_args()
+	# args = define_module_args()
 
-	if args.subcommand is None:
-		print("Error: specify model")
-		sys.exit(1)
+	# if args.subcommand is None:
+	# 	print("Error: specify model")
+	# 	sys.exit(1)
 
-	if args.cuda and not torch.cuda.is_available():
-		print("Error: cuda is not available, try it on CPU")
-		sys.exit(1)
-
+	# if args.cuda and not torch.cuda.is_available():
+	# 	print("Error: cuda is not available, try it on CPU")
+	# 	sys.exit(1)
+	args = argparse.Namespace()
+	args.content_weight = 5
+	args.style_weight = 1e3
+	args.tv_weight = 1e-2
+	args.target_rand = False
+	args.epochs = 1000
+	args.learning_rate = 0.06
+	args.show_transitions = True
+	args.optimizer = 'Adam'
+	args.interval = 20
+	args.content_image = '/home/content-sample.jpg'
+	args.style_image = '/home/sample-style.jpg'
+	args.segmentation = False
+	args.cuda = 1
+	args.style_weights = style_weights
+	stylize(args)
 
 	stylize(args)
 
