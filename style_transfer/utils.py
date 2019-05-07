@@ -54,6 +54,7 @@ class Utils(object):
 
 	@staticmethod
 	def save_image(filename, data):
+		img = data.copy()
 	    img = img.transpose(1, 2, 0).astype("uint8")
 	    img = Image.fromarray(img)
 	    img.save(filename)
