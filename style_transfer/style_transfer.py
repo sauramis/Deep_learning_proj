@@ -10,6 +10,7 @@ from PIL import Image
 import time
 import skimage.io
 from pathlib import Path
+import numpy as np
 
 def get_style_weights():
 	style_weights = {
@@ -47,7 +48,10 @@ def stylize(args):
 	output_filename = os.path.join(base_path, output_filename)
 
 	if args.segmentation:
-		output_image = Utils.tensor_im(transformed_image_tensor)
+		if not isinstance(transformed_image_tensor, np.ndarray):
+			output_image = Utils.tensor_im(transformed_image_tensor)
+		else:
+			output_image = transformed_image_tensor
 		output_image = Utils.apply_background(output_image, skimage.io.imread(args.content_image), seg_results)
 		Utils.save_image(output_filename, output_image, "np_arr")
 	else:
@@ -121,11 +125,11 @@ def main():
 	# For Fast Style Transfer
 
 	args.transfer_method = 2
-	args.segmentation = False
+	args.segmentation = True
 	args.content_image = '/content/content-sample.jpg'
-	args.content_scale = 0.4
+	args.content_scale = 1.0
 	args.model = 2
-	args.style_model_type = "candy"
+	args.style_model_type = "mosaic"
 	args.cuda = 1
 
 	stylize(args)

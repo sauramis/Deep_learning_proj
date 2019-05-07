@@ -9,13 +9,13 @@ class Utils(object):
 	@staticmethod
 	def apply_background(style_image, org_img, seg_results):
 		result_roi = seg_results["rois"]
-		image_out = style_image.copy()
+		image_out = org_img.copy()
 
 		for iter_ in range(result_roi.shape[0]):
 			mask = seg_results["masks"][:, :, iter_]
 
 			for c_iter in range(3):
-				image_out[:, :, c_iter] = np.where(mask == 0, org_img[:, :, c_iter], image_out[:, :, c_iter])
+				image_out[:, :, c_iter] = np.where(mask == 0, image_out[:, :, c_iter], style_image[:, :, c_iter])
 
 		return image_out
 
