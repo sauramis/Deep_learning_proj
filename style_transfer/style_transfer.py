@@ -38,14 +38,17 @@ def stylize(args):
 		transformed_image_tensor = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
 	elif args.transfer_method == 2:
 		transformer = FastStyleTransfer(args_dict, device)
-		transformed_image = transformer.inference()
+		transformed_image_tensor = transformer.inference()
 
 	if args.segmentation:
 		output_image = Utils.tensor_im(transformed_image_tensor)
 		output_image = Utils.apply_background(output_image, skimage.io.imread(args.content_image), seg_results)
 		Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', output_image, "np_arr")
 	else:
-		Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor)
+		if args.transfer_method == 2:
+			Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor, "np_arr")
+		else:
+			Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor)
 
 def define_module_args():
 	main_arg_parser = argparse.ArgumentParser(description="parser for style transfer")

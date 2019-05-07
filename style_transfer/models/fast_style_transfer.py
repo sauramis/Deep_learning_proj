@@ -8,6 +8,7 @@ from torchvision import transforms
 from .lib.fast_style_transfer.transformer_net import *
 from .lib.fast_style_transfer.utils import *
 from pathlib import Path
+from utils import Utils
 import torch.onnx
 
 class FastStyleTransfer(object):
@@ -46,4 +47,6 @@ class FastStyleTransfer(object):
 
             style_model.load_state_dict(state_dict)
             style_model.to(self.device)
-            output = style_model(content_image).cpu()
+            output = style_model(content_image).cpu()[0]
+
+        return extract_image(output)
