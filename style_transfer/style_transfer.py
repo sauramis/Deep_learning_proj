@@ -4,6 +4,8 @@ import sys
 from utils import Utils
 from models.vgg_transfer import *
 import argparse
+from PIL import Image
+from datetime import datetime
 
 def get_style_weights():
 	style_weights = {
@@ -29,7 +31,11 @@ def stylize(args):
 	c_img_tensor = Utils.im_tensor(c_img).to(device)
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
 	args_dict = vars(args)
-	transformer = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
+	transformed_image_np = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
+	transformed_image = Image.fromarray(transformed_image_np)
+	if transformed_image.mode != 'RGB':
+		transformed_image = transformed_image.convert('RGB')
+	transformed_image.save('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.PNG')
 
 
 def define_module_args():
