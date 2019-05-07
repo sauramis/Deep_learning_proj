@@ -14,7 +14,6 @@ from .lib.mrcnn import coco
 from .lib.mrcnn import utils
 from .lib.mrcnn import model as modellib
 
-
 class InferenceConfig(coco.CocoConfig):
 	# Set batch size to 1 since we'll be running inference on
     # one image at a time. Batch size = GPU_COUNT * IMAGES_PER_GPU
@@ -35,7 +34,7 @@ class Segmentation(object):
 	def load_class_names(self):
 		class_names = []
 
-		with open("./data/coco_class_names.yaml") as file_:
+		with open(os.path.abspath("./data/coco_class_names.yaml")) as file_:
 			class_names = yaml.safe_load(file_)
 
 		return class_names
