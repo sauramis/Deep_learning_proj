@@ -48,10 +48,13 @@ import urllib.request
 import shutil
 
 # Root directory of the project
-ROOT_DIR = os.path.abspath("../../")
+ROOT_DIR = os.path.abspath("../")
 
 # Import Mask RCNN
-sys.path.append(ROOT_DIR)  # To find local version of the library
+import sys
+import os
+sys.path.insert(0, ROOT_DIR)
+
 from mrcnn.config import Config
 from mrcnn import model as modellib, utils
 
