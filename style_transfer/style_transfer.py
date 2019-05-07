@@ -92,7 +92,7 @@ def main():
 	args.style_weight = 1e2
 	args.tv_weight = 1e-3
 	args.target_rand = False
-	args.epochs = 1000
+	args.epochs = 500
 	args.learning_rate = 0.08
 	args.show_transitions = True
 	args.optimizer = 'Adam'

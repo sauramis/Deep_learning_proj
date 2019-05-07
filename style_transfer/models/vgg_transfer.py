@@ -67,7 +67,6 @@ class VGGTransfer(object):
 
 			if self.show_transistions:
 				if iter_ % self.interval == 0:
-					Utils.save_image("test.jpg", target_img)
 					plt.imshow(target_image)
 					plt.axis('off')
 					plt.show()
