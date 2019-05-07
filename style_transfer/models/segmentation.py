@@ -9,13 +9,13 @@ import matplotlib
 import matplotlib.pyplot as plt
 import yaml
 
-import sys
-import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# import sys
+# import os
+# sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from lib.coco import coco
-from lib.mrcnn import utils
-import lib.mrcnn.model as modellib
+from .lib.coco import coco
+from .lib.mrcnn import utils
+from .lib.mrcnn import model as modellib
 
 
 class InferenceConfig(coco.CocoConfig):
