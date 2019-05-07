@@ -16,7 +16,7 @@ def get_style_weights():
 		'conv4_1': 0.2,
 		'conv5_1': 0.2
 	}
-	
+
 	return style_weights
 
 def stylize(args):
@@ -35,6 +35,9 @@ def stylize(args):
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
 	args_dict = vars(args)
 	transformed_image_np = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
+
+	print(type(transformed_image_np))
+
 	transformed_image = Image.fromarray(transformed_image_np)
 	if transformed_image.mode != 'RGB':
 		transformed_image = transformed_image.convert('RGB')
