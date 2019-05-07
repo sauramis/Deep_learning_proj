@@ -54,7 +54,7 @@ class Segmentation(object):
 		image = self.load_image(image_path)
 		result = self.model.detect([image.copy()], verbose=self.verbosity)
 
-		f_img = self.extract_foreground(result, image.copy())
+		f_img = self.extract_foreground(result[0], image.copy())
 
 		return f_img, image, result[0]
 
