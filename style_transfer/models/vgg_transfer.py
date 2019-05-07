@@ -69,7 +69,8 @@ class VGGTransfer(object):
 					plt.imshow(target_image)
 					plt.axis('off')
 					plt.show()
-		return target_image
+
+		return Utils.tensor_im(target_img)
 
 	def init_target(self, c_image):
 		if self.target_init_rand:

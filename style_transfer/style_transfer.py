@@ -35,7 +35,7 @@ def stylize(args):
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
 	args_dict = vars(args)
 	transformed_image_np = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
-	Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.PNG', transformed_image_np)
+	Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_np)
 
 def define_module_args():
 	main_arg_parser = argparse.ArgumentParser(description="parser for style transfer")
