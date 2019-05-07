@@ -17,7 +17,7 @@ def get_style_weights():
 def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
 
-	if args.segmentation():
+	if args.segmentation:
 		segmentation_model = models.Segmentation(args)
 		c_img, org_img, seg_results = segmentation_model.inference(args.content_image)
 	else:
@@ -26,10 +26,9 @@ def stylize(args):
 	style_img = Utils.load_image(args.style_image)
 
 	c_img_tensor = Utils.im_tensor(c_img).to(device)
-	s_img_tensor = Utils.im_tensor(style_img, shape=c_img.shape[-2:], style=True).to(device)
-
+	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
 	args_dict = vars(args)
-	transformer = VGGTransfer(args_dict, device)
+	transformer = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
 
 
 def define_module_args():
