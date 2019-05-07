@@ -1,7 +1,7 @@
 import torch
 import torch.optim as optim
 from torchvision import transforms, models
-
+import matplotlib.pyplot as plt
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -61,7 +61,7 @@ class VGGTransfer(object):
 			
 			total_loss = self.content_weight * content_loss + self.style_weight * cumm_style_loss + self.tv_weight * t_loss
 			optimizer.zero_grad()
-			total_loss.backward()
+			total_loss.backward(retain_graph=True)
 			optimizer.step()
 
 			if self.show_transistions:
