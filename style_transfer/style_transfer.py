@@ -129,7 +129,7 @@ def main():
 	args.content_image = '/content/content-sample.jpg'
 	args.content_scale = 1.0
 	args.model = 2
-	args.style_model_type = "mosaic"
+	args.style_model_type = "rain_princess"
 	args.cuda = 1
 
 	stylize(args)
