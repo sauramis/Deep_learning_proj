@@ -95,7 +95,7 @@ def main():
 	args.content_image = '/content/content-sample.jpg'
 	args.style_image = '/content/black_lines.jpg'
 	args.segmentation = True
-	args.cuda = 0
+	args.cuda = 1
 	args.style_weights = get_style_weights()
 
 	stylize(args)
