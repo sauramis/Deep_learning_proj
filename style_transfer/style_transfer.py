@@ -94,7 +94,7 @@ def main():
 	args.interval = 2
 	args.content_image = '/content/content-sample.jpg'
 	args.style_image = '/content/sample-style.jpg'
-	args.segmentation = True
+	args.segmentation = False
 	args.cuda = 1
 	args.style_weights = get_style_weights()
 	stylize(args)
