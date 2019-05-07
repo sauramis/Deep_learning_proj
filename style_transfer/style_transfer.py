@@ -4,6 +4,7 @@ import sys
 from utils import Utils
 from models.vgg_transfer import *
 from models.segmentation import *
+from models.fast_style_transfer import *
 import argparse
 from PIL import Image
 from datetime import datetime
@@ -22,18 +23,22 @@ def get_style_weights():
 
 def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
+	args_dict = vars(args)
 
 	if args.segmentation:
-		segmentation_model = Segmentation(args)
+		segmentation_model = Segmentation(args_dict)
 		_fr_img, seg_results = segmentation_model.inference(args.content_image)
 
-	c_img = Utils.load_image(args.content_image)
-	style_img = Utils.load_image(args.style_image)
+	if args.transfer_method == 1:
+		c_img = Utils.load_image(args.content_image)
+		style_img = Utils.load_image(args.style_image)
 
-	c_img_tensor = Utils.im_tensor(c_img).to(device)
-	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
-	args_dict = vars(args)
-	transformed_image_tensor = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
+		c_img_tensor = Utils.im_tensor(c_img).to(device)
+		s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
+		transformed_image_tensor = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
+	elif args.transfer_method == 2:
+		transformer = FastStyleTransfer(args_dict, device)
+		transformed_image = transformer.inference()
 
 	if args.segmentation:
 		output_image = Utils.tensor_im(transformed_image_tensor)
@@ -88,20 +93,31 @@ def main():
 	# 	sys.exit(1)
 		
 	args = argparse.Namespace()
-	args.content_weight = 5
-	args.style_weight = 1e2
-	args.tv_weight = 1e-3
-	args.target_rand = False
-	args.epochs = 500
-	args.learning_rate = 0.08
-	args.show_transitions = True
-	args.optimizer = 'Adam'
-	args.interval = 100
+	# args.content_weight = 5
+	# args.style_weight = 1e2
+	# args.tv_weight = 1e-3
+	# args.target_rand = False
+	# args.epochs = 500
+	# args.learning_rate = 0.08
+	# args.show_transitions = True
+	# args.optimizer = 'Adam'
+	# args.interval = 100
+	# args.content_image = '/content/content-sample.jpg'
+	# args.style_image = '/content/black_lines.jpg'
+	# args.segmentation = False
+	# args.cuda = 1
+	# args.transfer_method = 2
+	# args.style_weights = get_style_weights()
+
+	# For Fast Style Transfer
+
+	args.transfer_method = 2
+	args.segmentation = False
 	args.content_image = '/content/content-sample.jpg'
-	args.style_image = '/content/black_lines.jpg'
-	args.segmentation = True
+	args.content_scale = 420
+	args.model = 2
+	args.style_model_type = "candy"
 	args.cuda = 1
-	args.style_weights = get_style_weights()
 
 	stylize(args)
 
