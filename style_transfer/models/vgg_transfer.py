@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import sys
 import os
 from PIL import Image
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+import skimage.io
 
 from utils import Utils
 
@@ -67,13 +67,12 @@ class VGGTransfer(object):
 
 			if self.show_transistions:
 				if iter_ % self.interval == 0:
-					img = Image.fromarray(target_image.astype("uint8"))
-					img.save("test.png")
+					Utils.save_image("test.jpg", target_img)
 					plt.imshow(target_image)
 					plt.axis('off')
 					plt.show()
 
-		return Utils.tensor_im(target_img)
+		return target_img
 
 	def init_target(self, c_image):
 		if self.target_init_rand:

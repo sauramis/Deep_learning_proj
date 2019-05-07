@@ -54,7 +54,4 @@ class Utils(object):
 
 	@staticmethod
 	def save_image(filename, data):
-		img = data.copy()
-		# img = img.transpose(1, 2, 0).astype("uint8")
-		img = Image.fromarray(img.astype("uint8"))
-		img.save(filename)
+	    skimage.io.imsave(filename, Utils.tensor_im(data))

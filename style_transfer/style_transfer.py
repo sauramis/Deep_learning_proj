@@ -32,8 +32,8 @@ def stylize(args):
 	c_img_tensor = Utils.im_tensor(c_img).to(device)
 	s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
 	args_dict = vars(args)
-	transformed_image_np = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
-	Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_np)
+	transformed_image_tensor = VGGTransfer(args_dict, device).inference(c_img_tensor, s_img_tensor)
+	Utils.save_image('./results-'+datetime.now().strftime("%Y-%m-%d %H:%M:%S")+'.png', transformed_image_tensor)
 
 def define_module_args():
 	main_arg_parser = argparse.ArgumentParser(description="parser for style transfer")
@@ -92,7 +92,7 @@ def main():
 	args.interval = 100
 	args.content_image = '/content/content-sample.jpg'
 	args.style_image = '/content/black_lines.jpg'
-	args.segmentation = True
+	args.segmentation = False
 	args.cuda = 1
 	args.style_weights = get_style_weights()
 
