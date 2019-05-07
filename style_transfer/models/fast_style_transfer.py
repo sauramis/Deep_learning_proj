@@ -10,7 +10,7 @@ from .lib.fast_style_transfer.utils import *
 from pathlib import Path
 from utils import Utils
 import torch.onnx
-from torch.utils.model_zoo import _download_url_to_file
+from urllib import request
 import zipfile
 
 class FastStyleTransfer(object):
@@ -25,10 +25,10 @@ class FastStyleTransfer(object):
     def download_model(self):
         download_dest = os.path.join(self.model_dir, "saved_models.zip")
 
-        _download_url_to_file(self.MODEL_DOWNLOAD_URL, download_dest, None, True)
+        request.urlretrieve(self.MODEL_DOWNLOAD_URL, download_dest)
 
         with zipfile.ZipFile(download_dest) as zf:
-            zf.extractall(path=self.model_dir)
+            zf.extractall(path=Path(self.model_dir).parent)
 
     def resolve_model_path(self):
         model_path = Path(os.path.join(self.model_dir, self.style_model_type + ".pth"))
