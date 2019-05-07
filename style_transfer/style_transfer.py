@@ -3,6 +3,7 @@ import os
 import sys
 from utils import Utils
 from models.vgg_transfer import *
+import argparse
 
 def stylize(args):
 	device = torch.device("cuda" if args.cuda == 1 else "cpu")
