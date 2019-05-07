@@ -44,10 +44,18 @@ class Utils(object):
 
 	@staticmethod
 	def tensor_im(img_tensor):
-			image = img_tensor.cpu().clone().detach().numpy()
-			image = image.squeeze()
-			image = image.transpose(1, 2, 0)
-			image = image * np.array((0.5, 0.5, 0.5)) + np.array((0.5, 0.5, 0.5))
-			image = image.clip(0, 1)
-			
-			return image
+		image = img_tensor.cpu().clone().detach().numpy()
+		image = image.squeeze()
+		image = image.transpose(1, 2, 0)
+		image = image * np.array((0.5, 0.5, 0.5)) + np.array((0.5, 0.5, 0.5))
+		image = image.clip(0, 1)
+		
+		return image
+
+	@staticmethod
+	def save_image(filename, data):
+	    img = data.clone().clamp(0, 255).numpy()
+	    img = img.transpose(1, 2, 0).astype("uint8")
+	    img = Image.fromarray(img)
+	    img.save(filename)
+
