@@ -53,7 +53,9 @@ ROOT_DIR = os.path.abspath("../")
 # Import Mask RCNN
 import sys
 import os
-sys.path.insert(0, "../")
+sys.path.insert(0, ROOT_DIR)
+
+print(sys.path)
 
 from mrcnn.config import Config
 from mrcnn import model as modellib, utils
