@@ -9,7 +9,6 @@ import torch
 import torch.optim as optim
 from torchvision import transforms, models
 
-
 if __name__ == "__main__":
     args = argparse.Namespace()
     args.transfer_method = 2
@@ -39,5 +38,3 @@ if __name__ == "__main__":
     if c_img_tensor is not None:
         c_img_tensor_true = True
         assert (c_img_tensor_true), "The create image tensor test case has failed"
-
-
