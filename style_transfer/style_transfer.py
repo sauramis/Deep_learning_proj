@@ -103,32 +103,6 @@ def main():
 
 	if args.transfer_method == 1:
 		args.style_weights = get_style_weights()
-		
-	# args = argparse.Namespace()
-	# args.content_weight = 5
-	# args.style_weight = 1e2
-	# args.tv_weight = 1e-3
-	# args.target_rand = False
-	# args.epochs = 500
-	# args.learning_rate = 0.08
-	# args.show_transitions = True
-	# args.optimizer = 'Adam'
-	# args.interval = 100
-	# args.content_image = '/content/content-sample.jpg'
-	# args.style_image = '/content/black_lines.jpg'
-	# args.segmentation = False
-	# args.cuda = 1
-	# args.transfer_method = 2
-	# args.style_weights = get_style_weights()
-
-	# For Fast Style Transfer
-
-	# args.transfer_method = 2
-	# args.segmentation = True
-	# args.content_image = '/content/content-sample.jpg'
-	# args.content_scale = 1.0
-	# args.style_model_type = "rain_princess"
-	# args.cuda = 1
 
 	stylize(args)
 

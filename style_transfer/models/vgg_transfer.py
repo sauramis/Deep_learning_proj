@@ -6,6 +6,7 @@ import sys
 import os
 from PIL import Image
 import skimage.io
+import numpy as np
 
 from utils import Utils
 
@@ -75,7 +76,7 @@ class VGGTransfer(object):
 
 	def init_target(self, c_image):
 		if self.target_init_rand:
-			return c_image.copy()
+			return torch.tensor(np.random.uniform(low=0, high=255, size=c_image.shape)).requires_grad_(True).to(self.device)
 		else:
 			return c_image.clone().requires_grad_(True).to(self.device)
 
