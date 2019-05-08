@@ -5,6 +5,10 @@ sys.path.insert(0, '../style_transfer')
 import numpy as np
 from utils import Utils
 import argparse
+import torch
+import torch.optim as optim
+from torchvision import transforms, models
+
 
 if __name__ == "__main__":
     args = argparse.Namespace()
