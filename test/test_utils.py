@@ -24,14 +24,18 @@ if __name__ == "__main__":
     args.cuda = 0
     # args_dict = vars(args)
     #segmentation_model = Segmentation(args_dict)
+    if args.cuda and not torch.cuda.is_available():
+        print("Error: cuda is not available, try it on CPU")
+        sys.exit(1)
 
+    device = torch.device("cuda" if args.cuda == 1 else "cpu")
+    
     c_img = Utils.load_image(args.content_image)
     #style_img = Utils.load_image(args.style_image)
     if c_img is not None:
         assert (c_img), "The Utils load image test case has failed"
 
     c_img_tensor = Utils.im_tensor(c_img).to(device)
-
     if c_img_tensor is not None:
         c_img_tensor_true = True
         assert (c_img_tensor_true), "The create image tensor test case has failed"
