@@ -70,7 +70,7 @@ def get_routine_args():
     eval_arg_parser = subparsers.add_parser("eval", help="parser for evaluation/stylizing arguments")
     eval_arg_parser.add_argument("--content-image", type=str, required=True,
                                  help="path to content image you want to stylize")
-    eval_arg_parser.add_argument("--content-scale", type=float, default=None,
+    eval_arg_parser.add_argument("--content-scale", type=float, default=0.5,
                                  help="factor for scaling down the content image")
     eval_arg_parser.add_argument("--output-image", type=str, required=True,
                                  help="path for saving the output image")
