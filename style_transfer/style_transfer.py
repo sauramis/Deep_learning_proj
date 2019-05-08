@@ -72,7 +72,6 @@ def define_module_args():
 	main_arg_parser.add_argument("--content-weight", help="weight for content-loss, default is 5",type=float, default=5)
 	main_arg_parser.add_argument("--style-weight", help="weight for style-loss, default is 1e2", type=float, default=1e2)
 	main_arg_parser.add_argument("--tv-weight", help="weight for TV-loss, default is 1e-3", type=float, default=1e-3)
-	main_arg_parser.add_argument("--tv-weight", help="weight for TV-loss, default is 1e-3", type=float, default=1e-3)
 	main_arg_parser.add_argument("--learning-rate", help="Learning Rate", type=float, default=0.08)
 	main_arg_parser.add_argument("--target-rand", help="Initialize with random image", type=bool, default=False)
 	main_arg_parser.add_argument("--show-transitions", help="Set to show intermediate transitions", type=bool, default=False)
@@ -96,6 +95,10 @@ def main():
 	if args.cuda and not torch.cuda.is_available():
 		print("Error: cuda is not available, try it on CPU")
 		sys.exit(1)
+
+
+	if args.transfer_method == 1:
+		args.style_weights = get_style_weights()
 		
 	# args = argparse.Namespace()
 	# args.content_weight = 5
