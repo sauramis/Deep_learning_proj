@@ -77,11 +77,8 @@ def define_module_args():
 	main_arg_parser.add_argument("--show-transitions", help="Set to show intermediate transitions", type=bool, default=False)
 	main_arg_parser.add_argument("--optimizer", help="type of optimizer to be used", type=str, default="Adam")
 	main_arg_parser.add_argument("--interval", help="epoch interval for showing intermediate transitions", type=int, default=100)
-	main_arg_parser.add_argument("--tv-weight", help="weight for TV-loss, default is 1e-3", type=float, default=1e-3)
 	main_arg_parser.add_argument("--content-scale", help="set the content image scale for Fast style transfer", type=float, default=1.0)
 	main_arg_parser.add_argument("--select-model-type", help="select the pre-trained style model type (candy|mosaic|rain_princess|udnie).", type=str, default=1e-3, required=True)
-
-
 
 	return main_arg_parser.parse_args()
 
