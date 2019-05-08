@@ -3,10 +3,11 @@ import sys
 sys.path.insert(0, '../style_transfer')
 
 import numpy as np
-import skimage.io
-from PIL import Image
 from utils import Utils
 import argparse
+import torch
+import torch.optim as optim
+from torchvision import transforms, models
 
 if __name__ == "__main__":
     args = argparse.Namespace()
@@ -23,17 +24,13 @@ if __name__ == "__main__":
     # args_dict = vars(args)
     #segmentation_model = Segmentation(args_dict)
 
-    c_img = Utils.load_image(args.content_image).convert('RGB')
-    print("done")
+    c_img = Utils.load_image(args.content_image)
     #style_img = Utils.load_image(args.style_image)
-    c_img_true = False
     if c_img is not None:
-        c_img_true = True
-        assert (not c_img_true), "The Utils load image test case passed"
+        assert (c_img), "The Utils load image test case has failed"
 
+    c_img_tensor = Utils.im_tensor(c_img).to(device)
 
-    #s_img_tensor = Utils.im_tensor(style_img, shape=c_img_tensor.shape[-2:], style=True).to(device)
-    #c_img_tensor_true = False
-    #if c_img_tensor is not None:
-        #c_img_tensor_true = True
-        #assert (c_img_tensor_true), "The create image tensor passed"
+    if c_img_tensor is not None:
+        c_img_tensor_true = True
+        assert (c_img_tensor_true), "The create image tensor test case has failed"
