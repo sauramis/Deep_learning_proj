@@ -4,7 +4,8 @@ from torchvision import transforms, models
 import matplotlib.pyplot as plt
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from PIL import Image
+import skimage.io
 
 from utils import Utils
 
@@ -69,7 +70,8 @@ class VGGTransfer(object):
 					plt.imshow(target_image)
 					plt.axis('off')
 					plt.show()
-		return target_image
+
+		return target_img
 
 	def init_target(self, c_image):
 		if self.target_init_rand:

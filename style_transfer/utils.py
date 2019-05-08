@@ -3,18 +3,18 @@ import skimage.io
 import torch
 from torchvision import transforms
 from PIL import Image
+
 class Utils(object):
 	
 	@staticmethod
 	def apply_background(style_image, org_img, seg_results):
 		result_roi = seg_results["rois"]
-		n_channel = image.shape[:3]
 		image_out = org_img.copy()
 
 		for iter_ in range(result_roi.shape[0]):
 			mask = seg_results["masks"][:, :, iter_]
 
-			for c_iter in range(n_channel):
+			for c_iter in range(3):
 				image_out[:, :, c_iter] = np.where(mask == 0, image_out[:, :, c_iter], style_image[:, :, c_iter])
 
 		return image_out
@@ -43,10 +43,17 @@ class Utils(object):
 
 	@staticmethod
 	def tensor_im(img_tensor):
-			image = img_tensor.cpu().clone().detach().numpy()
-			image = image.squeeze()
-			image = image.transpose(1, 2, 0)
-			image = image * np.array((0.5, 0.5, 0.5)) + np.array((0.5, 0.5, 0.5))
-			image = image.clip(0, 1)
-			
-			return image
+		image = img_tensor.cpu().clone().detach().numpy()
+		image = image.squeeze()
+		image = image.transpose(1, 2, 0)
+		image = image * np.array((0.5, 0.5, 0.5)) + np.array((0.5, 0.5, 0.5))
+		image = image.clip(0, 1)
+		
+		return image
+
+	@staticmethod
+	def save_image(filename, data, d_type="tensor"):
+		if d_type == "tensor":
+			skimage.io.imsave(filename, Utils.tensor_im(data))
+		else:
+			skimage.io.imsave(filename, data)
