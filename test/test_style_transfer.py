@@ -44,6 +44,7 @@ def test_main():
             exists = True
             break
     assert(exists), "The stylizing test case has failed"
+    print("OK")
 
 if __name__ == "__main__":
     test_main()

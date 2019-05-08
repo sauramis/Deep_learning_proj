@@ -33,8 +33,10 @@ if __name__ == "__main__":
     #style_img = Utils.load_image(args.style_image)
     if c_img is not None:
         assert (c_img), "The Utils load image test case has failed"
+        print("OK")
 
     c_img_tensor = Utils.im_tensor(c_img).to(device)
     if c_img_tensor is not None:
         c_img_tensor_true = True
         assert (c_img_tensor_true), "The create image tensor test case has failed"
+        print("OK")
