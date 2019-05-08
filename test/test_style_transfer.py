@@ -43,7 +43,7 @@ def test_main():
         if re.search("results", file):
             exists = True
             break
-    assert(not exists), "The test case passed"
+    assert(exists), "The stylizing test case has failed"
 
 if __name__ == "__main__":
     test_main()
